@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM historial_reserva WHERE tipo_vehiculo = :tipoVehiculo AND estado = 'ACTIVA'

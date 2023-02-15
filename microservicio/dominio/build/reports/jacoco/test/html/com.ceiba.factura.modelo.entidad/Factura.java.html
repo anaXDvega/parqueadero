@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Factura.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dominio</a> &gt; <a href="index.source.html" class="el_package">com.ceiba.factura.modelo.entidad</a> &gt; <span class="el_source">Factura.java</span></div><h1>Factura.java</h1><pre class="source lang-java linenums">package com.ceiba.factura.modelo.entidad;
+
+import com.ceiba.dominio.ValidadorArgumento;
+import lombok.Getter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+import static com.ceiba.utils.ConstantesParqueadero.*;
+import static com.ceiba.utils.UtilCalcularTiempo.horasEntreFechas;
+import static com.ceiba.utils.UtilCalcularTiempo.localDateTime;
+
+@Getter
+public class Factura {
+<span class="nc" id="L16">    private int id;</span>
+
+<span class="fc" id="L18">    private int idReserva;</span>
+
+<span class="fc" id="L20">    private LocalDateTime fechaInicio;</span>
+<span class="fc" id="L21">    private LocalDateTime fechaFin;</span>
+
+<span class="fc" id="L23">    private Double valorTotal;</span>
+<span class="nc" id="L24">    private String estado;</span>
+    public void setFechaFin(LocalDateTime fechaFin) {
+<span class="fc" id="L26">        this.fechaFin = fechaFin;</span>
+<span class="fc" id="L27">    }</span>
+
+    public void setValorTotal(Double valorTotal) {
+<span class="fc" id="L30">        this.valorTotal = valorTotal;</span>
+<span class="fc" id="L31">    }</span>
+
+<span class="nc" id="L33">    public Factura(int idReserva){</span>
+<span class="nc" id="L34">        this.idReserva = idReserva;</span>
+<span class="nc" id="L35">        this.fechaFin = LocalDateTime.now();</span>
+<span class="nc" id="L36">    }</span>
+<span class="nc" id="L37">    public Factura(int id, int idReserva, LocalDateTime fechaFin, Double valorTotal){</span>
+<span class="nc" id="L38">        this.idReserva = idReserva;</span>
+<span class="nc" id="L39">        this.id = id;</span>
+<span class="nc" id="L40">        this.fechaFin = fechaFin;</span>
+<span class="nc" id="L41">        this.valorTotal = valorTotal;</span>
+<span class="nc" id="L42">        this.estado= ESTADO_FINALIZADA;</span>
+<span class="nc" id="L43">    }</span>
+<span class="fc" id="L44">    public Factura(int id, int idReserva, LocalDateTime fechaInicio, Double valorTotal, String estado){</span>
+<span class="fc" id="L45">        this.idReserva = idReserva;</span>
+<span class="fc" id="L46">        this.id = id;</span>
+<span class="fc" id="L47">        this.fechaInicio = fechaInicio;</span>
+<span class="fc" id="L48">        this.valorTotal = valorTotal;</span>
+<span class="fc" id="L49">        this.estado= estado;</span>
+<span class="fc" id="L50">    }</span>
+
+    public static Factura reconstruir(int id, int idReserva, LocalDateTime fechaInicio,
+                                      Double valorTotal, String estado) {
+<span class="fc" id="L54">        ValidadorArgumento.validarObligatorio(idReserva, IDRESERVA_REQUERIDA);</span>
+<span class="fc" id="L55">        ValidadorArgumento.validarObligatorio(fechaInicio, FECHAINICIO_REQUERIDA);</span>
+<span class="fc" id="L56">        return new Factura( id, idReserva, fechaInicio,</span>
+                valorTotal, estado);
+    }
+
+    public static long horasRecargo(LocalDateTime fechaInicio,LocalDateTime fechaReserva) {
+<span class="fc" id="L61">      return horasEntreFechas(fechaReserva, fechaInicio);</span>
+    }
+
+    public static long calcularHoras(LocalDateTime fechaInicio,LocalDateTime fechaFin) {
+<span class="fc" id="L65">        return horasEntreFechas(fechaInicio, fechaFin);</span>
+    }
+
+    public static boolean mayorA15Dias(LocalDateTime fechaInicio,LocalDateTime fechaFin) {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        return horasEntreFechas(fechaInicio, fechaFin)&gt;=QUINCE_DIAS_EN_HORAS;</span>
+    }
+    public static boolean esCilindrajeGrande(int tipoVehiculo, Long cilindraje){
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">        return tipoVehiculo==1 &amp;&amp; cilindraje&gt;=CILINDRAJE_MOTO_GRANDE;</span>
+    }
+    public static Double calcularPagoSinRecargo(double precioHora,double precioMedioDia,double precioDia, Long cantHoras) {
+<span class="fc" id="L75">        Double total= (double) 0;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        while(cantHoras&gt;=12) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if(cantHoras/24&gt;=1) {</span>
+<span class="fc" id="L78">                total=total+precioDia;</span>
+<span class="fc" id="L79">                cantHoras =cantHoras-24;</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            }else if(cantHoras/12&gt;=1) {</span>
+<span class="fc" id="L81">                total=total+precioMedioDia;</span>
+<span class="fc" id="L82">                cantHoras =cantHoras-12;</span>
+            }
+        }
+<span class="fc" id="L85">        total=total+(cantHoras*precioHora);</span>
+<span class="fc" id="L86">        return total;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapeoFactura.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">infraestructura</a> &gt; <a href="index.source.html" class="el_package">com.ceiba.factura.adaptador.repositorio</a> &gt; <span class="el_source">MapeoFactura.java</span></div><h1>MapeoFactura.java</h1><pre class="source lang-java linenums">package com.ceiba.factura.adaptador.repositorio;
+import com.ceiba.factura.modelo.dto.FacturaDTO;
+import com.ceiba.factura.modelo.entidad.Factura;
+import com.ceiba.infraestructura.jdbc.MapperResult;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+@Component
+<span class="fc" id="L11">public class MapeoFactura implements RowMapper&lt;FacturaDTO&gt;, MapperResult {</span>
+    @Override
+    public FacturaDTO mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+<span class="nc" id="L14">        var id = resultSet.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L15">        var idReserva = resultSet.getInt(&quot;id_reserva&quot;);</span>
+<span class="nc" id="L16">        var fechaInicio = resultSet.getTimestamp(&quot;fecha_inicio&quot;);</span>
+<span class="nc" id="L17">        var fechaFin = resultSet.getTimestamp(&quot;fecha_fin&quot;);</span>
+<span class="nc" id="L18">        var valor =resultSet.getBigDecimal(&quot;valor_total&quot;);</span>
+<span class="nc" id="L19">        var estado=resultSet.getString(&quot;estado&quot;);</span>
+<span class="nc" id="L20">        return  new FacturaDTO(id, idReserva, fechaInicio.toLocalDateTime(),fechaFin.toLocalDateTime(),  valor, estado);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

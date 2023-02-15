@@ -1,0 +1,1 @@
+select count(1) from historial_reserva where placa = :placa and fecha = :fecha and estado<>'FINALIZADA'
